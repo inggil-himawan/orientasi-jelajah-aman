@@ -28,7 +28,11 @@ export default function SearchBox({ onCari }: SearchBoxProps) {
           onSubmitEditing={handleCari}
           style={{ flex: 1, borderWidth: 1, padding: 8, borderRadius: 6 }}
         />
-        <Button title="Cari" onPress={handleCari} />
+        <Button
+          title="Cari"
+          onPress={() => onCari(teks)}
+          accessibilityLabel="Cari cuaca untuk kota yang dimasukkan"
+        />
       </View>
     </SafeAreaView>
   );
