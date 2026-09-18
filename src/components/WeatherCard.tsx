@@ -1,5 +1,4 @@
 // components/WeatherCard.tsx
-
 import { View, Text } from "react-native";
 
 import { WeatherCardProps, TingkatAQI } from "../types/cuaca";

@@ -1,4 +1,3 @@
-
 import { View, Button } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 
