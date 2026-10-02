@@ -1,5 +1,4 @@
 // src/services/weatherAdapter.ts
-
 import { TingkatAQI } from "../types/cuaca";
 
 export function konversiTingkatAQI(indeksEropa: number): TingkatAQI {

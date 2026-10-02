@@ -1,5 +1,4 @@
 // src/app/(tabs)/index.tsx
-
 import { useEffect, useRef, useState } from "react";
 import {
     ActivityIndicator,
@@ -99,18 +98,29 @@ export default function HalamanUtama() {
       )}
 
       {cuaca && kualitasUdara && kotaTerpilih && !sedangMemuat && (
-        <WeatherCard
-          kota={kotaTerpilih.name}
-          suhu={cuaca.saatIni.suhu}
-          tingkatAQI={konversiTingkatAQI(kualitasUdara.indeksAQI)}
-          indeksAQI={kualitasUdara.indeksAQI}
-        />
+        <>
+          <WeatherCard
+            kota={kotaTerpilih.name}
+            suhu={cuaca.saatIni.suhu}
+            tingkatAQI={konversiTingkatAQI(kualitasUdara.indeksAQI)}
+            indeksAQI={kualitasUdara.indeksAQI}
+          />
+          <Text style={{ fontSize: 14, color: "#555", textAlign: "center" }}>
+            Hari ini: maks. {cuaca.harian.suhuMaksimal[0]}°C • min. {cuaca.harian.suhuMinimal[0]}°C
+          </Text>
+        </>
       )}
 
       {cuaca && (
         <Text style={{ fontSize: 12, color: "#888" }}>
           Kondisi: {labelKodeCuaca(cuaca.saatIni.kodeCuaca)} • Angin{" "}
           {cuaca.saatIni.kecepatanAngin} km/j
+        </Text>
+      )}
+
+      {kualitasUdara && (
+        <Text style={{ fontSize: 11, color: "#888", textAlign: "center" }}>
+          PM2.5: {kualitasUdara.pm25} µg/m³ • PM10: {kualitasUdara.pm10} µg/m³
         </Text>
       )}
 

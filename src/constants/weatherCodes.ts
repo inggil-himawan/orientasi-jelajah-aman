@@ -1,5 +1,4 @@
 // src/constants/weatherCodes.ts
-
 const kamusKodeCuaca: Record<number, string> = {
   0: "Cerah",
   1: "Cerah Berawan",

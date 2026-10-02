@@ -1,5 +1,4 @@
 // src/components/AtribusiCuaca.tsx
-
 import { Text, TouchableOpacity, Linking } from "react-native";
 
 export default function AtribusiCuaca() {
