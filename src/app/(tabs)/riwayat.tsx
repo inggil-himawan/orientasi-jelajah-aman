@@ -1,10 +1,11 @@
 // src/app/(tabs)/riwayat.tsx
 import { useState, useCallback } from "react";
-import { View, Text, Button } from "react-native";
+import { View, Text, Button, Alert, Platform } from "react-native";
 import { useFocusEffect } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ambilSemuaFavorit, hapusFavorit } from "../../services/favoritStorage";
 import { KotaFavorit } from "../../types/favorit";
+
 
 export default function TabRiwayat() {
   const [daftarFavorit, setDaftarFavorit] = useState<KotaFavorit[]>([]);
@@ -20,9 +21,36 @@ export default function TabRiwayat() {
     setDaftarFavorit((prev) => prev.filter((k) => k.id !== id));
   }
 
+  // FITUR 1: konfirmasi sebelum menghapus
+  function konfirmasiHapus(kota: KotaFavorit) {
+    const pesan = `Yakin hapus ${kota.nama}?`;
+
+    // Web: Alert.alert tidak didukung, pakai confirm bawaan browser
+    if (Platform.OS === "web") {
+      if (window.confirm(pesan)) {
+        hapus(kota.id);
+      }
+      return;
+    }
+
+    // Android / iOS
+    Alert.alert("Konfirmasi", pesan, [
+      { text: "Batal", style: "cancel" },
+      {
+        text: "Hapus",
+        style: "destructive",
+        onPress: () => hapus(kota.id),
+      },
+    ]);
+  }
+
   return (
     <SafeAreaView style={{ flex: 1, padding: 16, gap: 12 }}>
       <Text style={{ fontSize: 18, fontWeight: "bold" }}>Kota Favorit</Text>
+
+      {/* FITUR 2: jumlah favorit */}
+      <Text>Tersimpan {daftarFavorit.length} kota</Text>
+
       {daftarFavorit.length === 0 && <Text>Belum ada kota favorit</Text>}
       {daftarFavorit.map((kota) => (
         <View
@@ -34,7 +62,7 @@ export default function TabRiwayat() {
           }}
         >
           <Text>{kota.nama}</Text>
-          <Button title="Hapus" onPress={() => hapus(kota.id)} />
+          <Button title="Hapus" onPress={() => konfirmasiHapus(kota)} />
         </View>
       ))}
     </SafeAreaView>

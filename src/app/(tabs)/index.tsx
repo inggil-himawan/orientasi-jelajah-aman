@@ -1,5 +1,5 @@
 // src/app/(tabs)/index.tsx
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
     ActivityIndicator,
     Button,
@@ -23,7 +23,8 @@ import { ambilCuaca } from "../../services/weatherService";
 import { HasilGeocoding } from "../../types/geocoding";
 import { DataCuacaLengkap, DataKualitasUdara } from "../../types/weather";
 import { mintaIzinLokasi, ambilKoordinatSaatIni } from "../../services/locationService";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
+import { ambilSemuaFavorit } from "../../services/favoritStorage";
 
 export default function HalamanUtama() {
   const [teksCari, setTeksCari] = useState("");
@@ -39,6 +40,19 @@ export default function HalamanUtama() {
   const teksTertunda = useDebounce(teksCari, 500);
   const requestIdRef = useRef(0); // pencegah race condition
   const [pesanLokasi, setPesanLokasi] = useState<string | null>(null);
+  const [idFavorit, setIdFavorit] = useState<number[]>([]);
+
+  useFocusEffect(
+    useCallback(() => {
+      ambilSemuaFavorit().then((daftar) =>
+        setIdFavorit(daftar.map((k) => k.id))
+      );
+    }, [])
+  );
+
+  const sudahFavorit = kotaTerpilih
+    ? idFavorit.includes(kotaTerpilih.id)
+    : false;
 
   useEffect(() => {
     if (teksTertunda.trim().length === 0) {
@@ -132,7 +146,8 @@ export default function HalamanUtama() {
             tingkatAQI={konversiTingkatAQI(kualitasUdara.indeksAQI)}
           />
           <Button
-            title="Tambahkan ke Favorit"
+            title={sudahFavorit ? "Sudah di Favorit" : "Tambahkan ke Favorit"}
+            disabled={sudahFavorit}
             onPress={() =>
               router.push({
                 pathname: "/tambah-favorit",
